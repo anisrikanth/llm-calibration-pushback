@@ -6,13 +6,13 @@
 
 On 500 MMLU-Pro biology and chemistry questions, with Qwen2.5-Instruct at 1.5B and 3B parameters:
 
-- **Stated confidence carries no information.** Both models said they were about 99% sure on nearly every question (mean 98.7% and 99.4%) while being right only 39–45% of the time. Its AUROC was 0.47 and 0.51, which is chance level.
-- **Token probabilities do carry signal, but they're overconfident, and more so in the larger model.** AUROC was 0.79 and 0.78, but mean confidence was 62% against 40% accuracy for 1.5B, and 82% against 45% for 3B. ECE rose from 0.22 to 0.37.
-- **A bare "Are you sure?" barely moved the models. Naming a wrong answer moved them a lot.** Doubt alone flipped 5.5% (1.5B) and 7.5% (3B) of correct answers. When the user named a specific wrong option, the models switched to it on **49%** and **54%** of the questions they had answered correctly. Accuracy fell from 40% to 26% and from 45% to 26%.
-- **High confidence didn't help against a named suggestion.** Correct answers held at 95%+ probability almost never changed under bare doubt (1–2%), but were still abandoned for the user's suggestion 32% (1.5B) and 52% (3B) of the time.
-- **The larger model was not more robust.** The 3B model caved at least as often as the 1.5B under both kinds of pressure (the confidence intervals overlap).
+- **Stated confidence carries no information:** Both models said they were about 99% sure on nearly every question (mean 98.7% and 99.4%) while being right only 39–45% of the time. Its AUROC was 0.47 and 0.51, which is chance level.
+- **Token probabilities do carry signal, but they're overconfident, and moreso in the larger model:** AUROC was 0.79 and 0.78, but mean confidence was 62% against 40% accuracy for 1.5B, and 82% against 45% for 3B. ECE rose from 0.22 to 0.37.
+- **A bare "Are you sure?" barely moved the models. Naming a wrong answer moved them a lot:** Doubt alone flipped 5.5% (1.5B) and 7.5% (3B) of correct answers. When the user named a specific wrong option, the models switched to it on **49%** and **54%** of the questions they had answered correctly. Accuracy fell from 40% to 26% and from 45% to 26%.
+- **High confidence didn't help against a named suggestion:** Correct answers held at 95%+ probability almost never changed under bare doubt (1–2%), but were still abandoned for the user's suggestion 32% (1.5B) and 52% (3B) of the time.
+- **The larger model was not more robust:** The 3B model caved at least as often as the 1.5B under both kinds of pressure (the confidence intervals overlap).
 
-## Why this matters
+## Why this is important
 
 When someone uses a model on a question they can't easily check themselves, they rely on two signals: how confident the model is, and whether it sticks with its answer when questioned. If confidence is miscalibrated, or the model drops correct answers under mild social pressure, human oversight fails exactly where it's needed most. That's the core concern of *scalable oversight*. This project measures both signals on hard science questions, where non-experts are least able to check the answers.
 
@@ -65,13 +65,13 @@ Stated confidence barely varies. The 1.5B model said exactly 100 on 404 of 498 p
 
 **Naming a wrong answer had a large effect.** When the user suggested a specific wrong option, both models abandoned about half of their correct answers, and almost every one of those flips went to the suggested option (1.5B: 49.3% flipped, 48.8% adopted the suggestion; 3B: 54.4% and 54.4%). Accuracy fell 14 points for 1.5B and 20 points for 3B, leaving both at about 26%. The 9–10% wrong-to-right rate under *suggest* is mostly not self-correction. When the first answer is wrong, the random suggestion happens to be the correct option about 1 time in 9, and the models adopted suggestions 60–75% of the time. Following the suggestion alone predicts roughly 7–8%.
 
-**Taken together:** these models treat a user naming a specific answer as strong evidence, much more than a general expression of doubt, and the larger model was no more resistant.
+Taken together these models treat a user naming a specific answer as strong evidence, much more than a general expression of doubt, and the larger model was no more resistant.
 
 ![Confidence vs caving](results/figures/3_confidence_vs_caving.png)
 
 **High confidence protects against vague doubt but not against a named alternative.** Among correct answers the model held with at least 95% token probability, bare doubt almost never changed the answer: 2.3% for 1.5B (n = 87) and 1.2% for 3B (n = 164). The same high-confidence answers were abandoned for the user's suggestion 32% and 52% of the time. Under doubt, caving was concentrated at middling confidence (70–85%: 23% and 40%), though those bins hold only about 20 questions each. So confidence and robustness to a specific suggestion are largely separate properties.
 
-## Limitations
+## Experimental Limitations
 
 - **Two sizes from one model family.** The 7B model hasn't been run yet. Two points can't establish a scaling trend, and results may not transfer to other families or to frontier models.
 - **One wording per condition, greedy decoding.** Flip rates are likely sensitive to the exact phrasing of the follow-up.
@@ -91,7 +91,7 @@ Stated confidence barely varies. The 1.5B model said exactly 100 on 404 of 498 p
 - Mitigations: does a system prompt telling the model to keep correct answers under pushback reduce caving *without* reducing self-correction of wrong answers?
 - Linear probes on hidden states: does the model "know" its first answer was right even when it switches?
 
-## Reproduce
+## How to reproduce
 
 1. Open `calibration_pushback.ipynb` on Kaggle. Settings: **GPU T4 ×2**, **Internet on**. Check that the config cell prints two Tesla T4s, not `none (CPU)`.
 2. Run once with `DRY_RUN = True` (~5 min) to check the setup, then set it to `False` and **Run All**.
