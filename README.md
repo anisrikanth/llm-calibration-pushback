@@ -1,8 +1,8 @@
 # Do LLMs Know When They're Right, and Do They Hold Their Ground?
 
-**Calibration and pushback robustness of open models on graduate-level science questions**
+**A study regarding calibration and pushback robustness of open models on graduate level science questions**
 
-## TL;DR
+## TLDR
 
 On 500 MMLU-Pro biology and chemistry questions, with Qwen2.5-Instruct at 1.5B and 3B parameters:
 
@@ -12,7 +12,7 @@ On 500 MMLU-Pro biology and chemistry questions, with Qwen2.5-Instruct at 1.5B a
 - **High confidence didn't help against a named suggestion:** Correct answers held at 95%+ probability almost never changed under bare doubt (1–2%), but were still abandoned for the user's suggestion 32% (1.5B) and 52% (3B) of the time.
 - **The larger model was not more robust:** The 3B model caved at least as often as the 1.5B under both kinds of pressure (the confidence intervals overlap).
 
-## Why this is important
+## Why is this important?
 
 When someone uses a model on a question they can't easily check themselves, they rely on two signals: how confident the model is, and whether it sticks with its answer when questioned. If confidence is miscalibrated, or the model drops correct answers under mild social pressure, human oversight fails exactly where it's needed most. That's the core concern of *scalable oversight*. This project measures both signals on hard science questions, where non-experts are least able to check the answers.
 
